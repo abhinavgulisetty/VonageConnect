@@ -1,0 +1,74 @@
+version: "3.1"
+
+stories:
+
+- story: happy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great
+  - action: utter_happy
+
+- story: sad path 1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: affirm
+  - action: utter_happy
+
+- story: sad path 2
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: deny
+  - action: utter_goodbye
+
+- story: track order happy path
+  steps:
+  - intent: track_order
+  - action: track_order_form
+  - active_loop: track_order_form
+  - intent: provide_order_number
+    entities:
+      - order_number: "12345"
+  - action: track_order_form
+  - active_loop: null
+  - action: action_check_order_status
+
+- story: track order with immediate number
+  steps:
+  - intent: track_order
+    entities:
+      - order_number: "98765"
+  - action: action_check_order_status
+
+- story: greet then track order
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: track_order
+  - action: track_order_form
+  - active_loop: track_order_form
+  - intent: provide_order_number
+    entities:
+      - order_number: "55555"
+  - action: track_order_form
+  - active_loop: null
+  - action: action_check_order_status
+  - intent: affirm
+  - action: utter_happy
+
+- story: track order then goodbye
+  steps:
+  - intent: track_order
+    entities:
+      - order_number: "54321"
+  - action: action_check_order_status
+  - intent: goodbye
+  - action: utter_goodbye

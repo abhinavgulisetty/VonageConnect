@@ -1,0 +1,33 @@
+{
+  "name": "multi-channel-customer-service-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "rasa:server": "cd \"rasa_customer_care chatbot\" && rasa run --enable-api --cors \"*\"",
+    "rasa:actions": "cd \"rasa_customer_care chatbot\" && rasa run actions",
+    "rasa:train": "cd \"rasa_customer_care chatbot\" && rasa train",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/souparno-nag/multi-channel-customer-service-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/souparno-nag/multi-channel-customer-service-bot/issues"
+  },
+  "homepage": "https://github.com/souparno-nag/multi-channel-customer-service-bot#readme",
+  "dependencies": {
+    "@vonage/auth": "^1.0.0",
+    "@vonage/messages": "^1.20.3",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "node-fetch": "^2.7.0"
+  }
+}

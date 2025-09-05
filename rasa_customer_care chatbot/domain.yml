@@ -1,0 +1,77 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - track_order
+  - provide_order_number
+
+entities:
+  - order_number
+
+slots:
+  order_number:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: order_number
+
+responses:
+  utter_greet:
+  - text: "👋 Hello! I'm your customer service assistant. I can help you track your orders and answer questions."
+  - text: "😊 Hi there! How can I assist you today? I specialize in order tracking and customer support."
+  - text: "👋 Hey! Welcome to customer service. I'm here to help with your orders and any questions you might have."
+
+  utter_cheer_up:
+  - text: "🌈 Here's something to brighten your day! Don't worry, we'll get your issue sorted out."
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+  - text: "😊 I understand it can be frustrating. Let me help you get this resolved quickly."
+
+  utter_did_that_help:
+  - text: "🤔 Did that help resolve your issue?"
+  - text: "Does that answer your question? Is there anything else I can help with?"
+
+  utter_happy:
+  - text: "🎉 Excellent! I'm glad I could help. Feel free to reach out anytime!"
+  - text: "😄 Great to hear! Have a wonderful day and thank you for choosing us!"
+
+  utter_goodbye:
+  - text: "👋 Goodbye! Thanks for contacting us. Have a great day!"
+  - text: "👋 Take care! Don't hesitate to reach out if you need help with anything else."
+  - text: "Bye for now! We're always here when you need assistance. 😊"
+
+  utter_iamabot:
+  - text: "🤖 I'm an AI customer service assistant powered by RASA. I'm here 24/7 to help with your orders and questions!"
+  - text: "Yes, I'm a bot! 🤖 But I'm pretty smart and can help you track orders, answer questions, and solve problems."
+
+  utter_ask_order_number:
+  - text: "🔢 Please share your order number so I can track it for you. It usually looks like #12345 or just 12345."
+  - text: "📝 I'll need your order number to look up the status. Can you share it? (Format: #12345)"
+  - text: "🔍 To track your order, please provide the order number. You can find it in your confirmation email."
+
+  utter_order_status_result:
+  - text: "Status for order {order_number}: {order_status}"
+
+  utter_default:
+  - text: "🤔 I'm not sure I understand. I can help you track orders - try asking 'track order #12345' or 'where is my order?'"
+  - text: "😅 Sorry, I didn't catch that. I'm specialized in order tracking. You can ask me things like 'check my order status' or 'track order #98765'."
+  - text: "🤖 I'm here to help with order tracking and customer service. Try asking 'track my order' or 'where is order #12345'?"
+
+actions:
+  - action_check_order_status
+  - action_default_fallback
+
+forms:
+  track_order_form:
+    required_slots:
+      - order_number
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

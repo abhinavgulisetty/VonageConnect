@@ -1,0 +1,27 @@
+version: "3.1"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Activate track_order form
+  steps:
+  - intent: track_order
+  - action: track_order_form
+  - active_loop: track_order_form
+
+- rule: Submit track_order form
+  condition:
+  - active_loop: track_order_form
+  steps:
+  - action: track_order_form
+  - active_loop: null
+  - action: action_check_order_status

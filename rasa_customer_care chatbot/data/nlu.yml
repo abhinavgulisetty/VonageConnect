@@ -1,0 +1,151 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+
+- intent: track_order
+  examples: |
+    - Where is my order?
+    - Track my order
+    - What's the status of my order?
+    - order status please
+    - track order #12345
+    - Can you track order 12345?
+    - status for order #98765
+    - check order number 55555
+    - I need to track my package
+    - Can you help me find my order?
+    - Where's my package?
+    - What happened to my order?
+    - I want to check on my order
+    - My order status
+    - Order tracking
+    - Track package
+    - Check delivery status
+    - When will my order arrive?
+    - Has my order shipped?
+    - Order update please
+    - Find my order #77777
+    - Locate order 54321
+    - I'm looking for my order
+    - Can you tell me about order #11111?
+    - Order #22222 status
+    - What's happening with order 33333?
+    - Need help with order tracking
+    - Please track my order #44444
+    - I'd like to know where my order is
+
+- intent: provide_order_number
+  examples: |
+    - It's #12345
+    - 12345
+    - order number is 98765
+    - my order is #77777
+    - #54321
+    - the number is 10001
+    - My order number is #99999
+    - The order ID is 88888
+    - Order #67890
+    - It's 45678
+    - #13579
+    - 24680
+    - Order number: 11111
+    - #22222 is my order
+    - 33333 is the order number
+    - The order is #44444
+    - Order ID: 55556
+    - #87654
+    - My order: 76543
+    - Order reference 65432
+
+- regex: order_number
+  examples: |
+    - #[0-9]{3,8}
+    - [0-9]{3,8}

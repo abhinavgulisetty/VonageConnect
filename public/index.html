@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Customer Service Bot</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --panel: #0b1223;
+        --panel-2: #111827;
+        --text: #e5e7eb;
+        --muted: #a1a1aa;
+        --primary: #2563eb;
+        --primary-2: #60a5fa;
+        --bot: #1f2937;
+        --chip: #1f2937;
+      }
+      * { box-sizing: border-box; }
+      body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; color: var(--text); background: radial-gradient(1200px 600px at 10% -20%, #1f3a8a 0%, transparent 60%), radial-gradient(900px 500px at 90% 0%, #065f46 0%, transparent 55%), var(--bg); }
+      .app { max-width: 900px; margin: 0 auto; padding: 24px; min-height: 100vh; display: flex; flex-direction: column; gap: 16px; }
+      .header { background: linear-gradient(135deg, #0b1223 0%, #0f172a 60%, #1f2937 100%); border: 1px solid #1f2937; border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%); display: grid; place-items: center; color: white; font-weight: 800; letter-spacing: 0.5px; }
+      .title { font-size: 16px; font-weight: 700; }
+      .status { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
+      .dot { width: 8px; height: 8px; background: #22c55e; border-radius: 999px; box-shadow: 0 0 0 3px rgba(34,197,94,0.15); }
+
+      .card { background: linear-gradient(180deg, rgba(31,41,55,0.6), rgba(2,6,23,0.4)); border: 1px solid #1f2937; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; min-height: 64vh; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 12px 30px rgba(0,0,0,0.35); }
+      .chat { flex: 1; overflow-y: auto; padding: 16px; backdrop-filter: blur(4px); }
+      .chips { padding: 8px 16px 0; display: flex; flex-wrap: wrap; gap: 8px; }
+      .chip { border: 1px solid #243141; background: var(--chip); color: #cbd5e1; padding: 8px 12px; border-radius: 999px; cursor: pointer; font-size: 12px; }
+      .row { display: flex; gap: 10px; margin: 12px 0; align-items: flex-end; }
+      .me { justify-content: flex-end; }
+      .avatar { width: 28px; height: 28px; border-radius: 999px; display: grid; place-items: center; font-size: 12px; color: #e5e7eb; background: #0ea5e9; box-shadow: 0 0 0 3px rgba(14,165,233,0.15); }
+      .me .avatar { order: 2; background: #a855f7; box-shadow: 0 0 0 3px rgba(168,85,247,0.15); }
+      .bubble { max-width: 72%; padding: 10px 12px; border-radius: 14px; font-size: 14px; line-height: 1.4; position: relative; border: 1px solid #243141; }
+      .bot .bubble { background: #0b1223; color: #e5e7eb; border-bottom-left-radius: 4px; }
+      .me .bubble { background: linear-gradient(135deg, #2563eb, #0ea5e9); color: white; border-bottom-right-radius: 4px; border: none; }
+      .time { display: block; font-size: 11px; color: #9ca3af; margin-top: 6px; }
+
+      .composer { border-top: 1px solid #1f2937; padding: 12px; display: flex; align-items: center; gap: 10px; background: rgba(2,6,23,0.35); }
+      .input { flex: 1; display: flex; align-items: center; gap: 8px; background: #0b1223; border: 1px solid #243141; border-radius: 12px; padding: 8px 10px; }
+      .input textarea { width: 100%; resize: none; background: transparent; border: 0; outline: none; color: var(--text); font-size: 14px; max-height: 120px; }
+      .icon { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: #cbd5e1; border: 1px solid #243141; background: #111827; cursor: pointer; }
+      .send { padding: 10px 14px; border: 0; border-radius: 10px; background: linear-gradient(135deg, #22c55e, #16a34a); color: #081018; cursor: pointer; font-weight: 700; }
+      .hint { color: #9ca3af; font-size: 12px; margin-top: 6px; padding: 0 2px 8px; }
+
+      .typing { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: #0b1223; border: 1px solid #243141; border-radius: 12px; }
+      .dot-anim { width: 6px; height: 6px; background: #cbd5e1; border-radius: 999px; animation: blink 1.4s infinite; }
+      .dot-anim:nth-child(2) { animation-delay: .2s; }
+      .dot-anim:nth-child(3) { animation-delay: .4s; }
+      @keyframes blink { 0%, 80%, 100% { opacity: .2 } 40% { opacity: 1 } }
+
+      @media (max-width: 640px) {
+        .app { padding: 16px; }
+        .bubble { max-width: 85%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="header">
+        <div class="brand">
+          <div class="logo">CS</div>
+          <div class="title">Customer Service Bot</div>
+        </div>
+        <div class="status"><span class="dot"></span> Online</div>
+      </div>
+
+      <div class="card">
+        <div class="chips" id="chips"></div>
+        <div style="display:flex; gap:16px; padding: 0 16px 16px;">
+          <div style="flex:2; min-width:0; display:flex; flex-direction:column;">
+            <div id="chat" class="chat"></div>
+            <div class="composer">
+              <div class="input">
+                <div class="icon" title="Attach">📎</div>
+                <textarea id="input" placeholder="Type a message..." rows="1"></textarea>
+              </div>
+              <button class="send" id="sendBtn">Send ➤</button>
+            </div>
+          </div>
+          <div style="flex:1; min-width:260px; max-width:360px; background:#0b1223; border:1px solid #243141; border-radius:12px; overflow:hidden;">
+            <div style="padding:12px 14px; border-bottom:1px solid #243141; font-weight:700; font-size:13px; color:#cbd5e1; background:#0f172a; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+              <span>Channel Activity</span>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <select id="filter" style="background:#0b1223; color:#cbd5e1; border:1px solid #243141; border-radius:8px; padding:6px 8px; font-size:12px;">
+                  <option value="all">All</option>
+                  <option value="inbound_message">Inbound</option>
+                  <option value="rasa_response">Rasa Response</option>
+                  <option value="message_status">Status</option>
+                  <option value="web_chat_in">Web In</option>
+                  <option value="web_chat_out">Web Out</option>
+                </select>
+                <button id="pauseBtn" class="chip" style="padding:6px 10px;">Pause</button>
+                <button id="ttsBtn" class="chip" style="padding:6px 10px;">🔊 Voice Off</button>
+              </div>
+            </div>
+            <div id="activity" style="height: 44vh; overflow:auto; padding:10px 12px; font-size:12px; color:#cbd5e1;"></div>
+            <div style="padding:8px 12px; border-top:1px solid #243141; display:flex; gap:8px;">
+              <button id="exportBtn" class="chip" style="padding:6px 10px;">Export</button>
+              <button id="clearBtn" class="chip" style="padding:6px 10px;">Clear</button>
+              <button id="downloadTranscriptBtn" class="chip" style="padding:6px 10px; margin-left:auto;">Download Transcript</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hint">🎮 Demo Tip: Try "track order #12345" or use curl commands in terminal for WhatsApp/SMS testing! Works offline with fallback responses.</div>
+    </div>
+    <script>
+      const chat = document.getElementById('chat');
+      const input = document.getElementById('input');
+      const sendBtn = document.getElementById('sendBtn');
+      const chips = document.getElementById('chips');
+      const activity = document.getElementById('activity');
+      const filterSel = document.getElementById('filter');
+      const pauseBtn = document.getElementById('pauseBtn');
+      const ttsBtn = document.getElementById('ttsBtn');
+      const exportBtn = document.getElementById('exportBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const downloadTranscriptBtn = document.getElementById('downloadTranscriptBtn');
+
+      const quick = [
+        'Hello',
+        'Track my order',
+        'track order #12345',
+        'track order #98765',
+        'track order #55555',
+        'Where is my order?',
+        'Help me track order #77777',
+        'Check order status',
+        'Thanks!',
+        'Goodbye'
+      ];
+
+      function timeNow() {
+        const d = new Date();
+        return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+
+      function addTyping() {
+        const row = document.createElement('div');
+        row.className = 'row bot';
+        row.dataset.typing = '1';
+        row.innerHTML = `
+          <div class="avatar">B</div>
+          <div class="bubble">
+            <div class="typing"><span class="dot-anim"></span><span class="dot-anim"></span><span class="dot-anim"></span></div>
+          </div>`;
+        chat.appendChild(row);
+        chat.scrollTop = chat.scrollHeight;
+        return row;
+      }
+
+      function removeTyping() {
+        const t = chat.querySelector('[data-typing="1"]');
+        if (t) t.remove();
+      }
+
+      function append(role, text) {
+        const row = document.createElement('div');
+        row.className = 'row ' + (role === 'user' ? 'me' : 'bot');
+        const avatarText = role === 'user' ? 'U' : 'B';
+        row.innerHTML = `
+          <div class="avatar">${avatarText}</div>
+          <div class="bubble">${text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}<span class="time">${timeNow()}</span></div>
+        `;
+        if (role === 'user') row.querySelector('.avatar').style.order = 2;
+        chat.appendChild(row);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      let voiceOn = false;
+
+      function speak(text) {
+        if (!voiceOn) return;
+        try {
+          const u = new SpeechSynthesisUtterance(text);
+          u.rate = 1.05; u.pitch = 1; u.volume = 1; u.lang = 'en-US';
+          speechSynthesis.cancel();
+          speechSynthesis.speak(u);
+        } catch {}
+      }
+
+      async function send(message) {
+        append('user', message);
+        input.value = '';
+        autoResize();
+        const typing = addTyping();
+        try {
+          const res = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+          });
+          const data = await res.json();
+          removeTyping();
+          if (Array.isArray(data) && data.length) {
+            data.forEach(part => {
+              if (part.text) { append('bot', part.text); speak(part.text); }
+            });
+          } else {
+            append('bot', 'No response from server.');
+          }
+        } catch (e) {
+          removeTyping();
+          append('bot', 'Error contacting server.');
+        }
+      }
+
+      function autoResize() {
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+      }
+
+      input.addEventListener('input', autoResize);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          const msg = input.value.trim();
+          if (!msg) return;
+          send(msg);
+        }
+      });
+      sendBtn.addEventListener('click', () => {
+        const msg = input.value.trim();
+        if (!msg) return;
+        send(msg);
+      });
+
+      quick.forEach(q => {
+        const c = document.createElement('div');
+        c.className = 'chip';
+        c.textContent = q;
+        c.addEventListener('click', () => send(q));
+        chips.appendChild(c);
+      });
+
+      append('bot', '👋 Welcome to Customer Service! I can help you track orders. Try these demo commands: "track order #12345", "track order #98765", or "Where is my order?"');
+      
+      setTimeout(() => {
+        append('bot', '💡 Demo Order Numbers:\n• #12345 - Out for delivery\n• #98765 - Shipped\n• #55555 - Processing\n• #54321 - Delivered\n• #77777 - In transit');
+      }, 1500);
+      function renderActivity(items) {
+        activity.innerHTML = '';
+        const f = filterSel.value;
+        const filtered = items.filter(it => f === 'all' ? true : it.type === f);
+        filtered.slice(-50).reverse().forEach((it) => {
+          const div = document.createElement('div');
+          div.style.borderBottom = '1px solid #1f2937';
+          div.style.padding = '8px 0';
+          const t = new Date(it.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          const payload = JSON.stringify(it.payload, null, 2).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          div.innerHTML = `<div style="color:#93c5fd; font-weight:700; font-size:12px;">${it.type} <span style=\"color:#9ca3af; font-weight:500;\">${t}</span></div>
+                           <pre style=\"white-space:pre-wrap; margin:6px 0 0; color:#cbd5e1;\">${payload}</pre>`;
+          activity.appendChild(div);
+        });
+      }
+
+      let paused = false;
+      async function pollActivity() {
+        if (paused) return;
+        try {
+          const res = await fetch('/webhooks/data');
+          if (!res.ok) return;
+          const data = await res.json();
+          renderActivity(Array.isArray(data) ? data : []);
+        } catch {}
+      }
+      setInterval(pollActivity, 2000);
+      pollActivity();
+
+      filterSel.addEventListener('change', pollActivity);
+      pauseBtn.addEventListener('click', () => {
+        paused = !paused;
+        pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+        if (!paused) pollActivity();
+      });
+      ttsBtn.addEventListener('click', () => {
+        voiceOn = !voiceOn;
+        ttsBtn.textContent = voiceOn ? '🔊 Voice On' : '🔇 Voice Off';
+      });
+
+      exportBtn.addEventListener('click', () => {
+        window.open('/webhooks/export', '_blank');
+      });
+      clearBtn.addEventListener('click', async () => {
+        await fetch('/webhooks/clear', { method: 'POST' });
+        pollActivity();
+      });
+      downloadTranscriptBtn.addEventListener('click', async () => {
+        try {
+          const res = await fetch('/webhooks/data');
+          const data = await res.json();
+          const lines = [];
+          data.forEach((e) => {
+            if (e.type === 'web_chat_in') lines.push(`[User] ${e.payload.message}`);
+            if (e.type === 'web_chat_out') (e.payload.responses||[]).forEach(r => { if (r.text) lines.push(`[Bot] ${r.text}`) });
+            if (e.type === 'inbound_message') lines.push(`[Inbound ${e.payload.message?.from?.type||''}] ${e.payload.message?.content?.text||''}`);
+            if (e.type === 'rasa_response') (e.payload.messages||[]).forEach(r => { if (r.text) lines.push(`[Bot] ${r.text}`) });
+          });
+          const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = 'transcript.txt'; a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        } catch {}
+      });
+
+    </script>
+  </body>
+  </html>
+
+
