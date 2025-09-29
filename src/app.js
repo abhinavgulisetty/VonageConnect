@@ -23,6 +23,17 @@ class App {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(express.static(path.join(__dirname, '..', 'public')));
+    
+    // Add CORS middleware for Postman testing
+    this.app.use((req, res, next) => {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+      if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+      }
+      next();
+    });
   }
 
   setupRoutes() {
@@ -71,8 +82,10 @@ class App {
       console.log('1. Open http://localhost:3000 in your browser');
       console.log('2. Try: "Hello", "track order #12345", "Where is my order?"');
       console.log('3. Use curl commands from WHATSAPP_DEMO.md for WhatsApp/SMS testing');
+      console.log('4. Import Postman collection from ./postman/VonageConnect.postman_collection.json');
       console.log('\n📚 For detailed demo guide, see DEMO_GUIDE.md');
       console.log('📱 For WhatsApp/SMS curl commands, see WHATSAPP_DEMO.md');
+      console.log('📬 For Postman testing, see POSTMAN_GUIDE.md');
       console.log('================================================\n');
     });
   }

@@ -1,0 +1,317 @@
+{
+  "info": {
+    "_postman_id": "f5c8d9e3-4d78-4b1e-b5f6-8a7c9d0e1f2a",
+    "name": "VonageConnect",
+    "description": "API endpoints for testing the Multi-Channel Customer Service Bot",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Web Chat API",
+      "item": [
+        {
+          "name": "Send Chat Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Hello\",\n  \"sender\": \"postman-user\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/chat",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chat"
+              ]
+            },
+            "description": "Send a message to the chatbot and get a response"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Check if RASA server is available"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Webhook API",
+      "item": [
+        {
+          "name": "Simulate WhatsApp Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": {\n    \"from\": { \"type\": \"whatsapp\", \"number\": \"14155550123\" },\n    \"to\": { \"type\": \"whatsapp\", \"number\": \"14155550100\" },\n    \"content\": { \"text\": \"Hello\" }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/inbound-message",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "webhooks",
+                "inbound-message"
+              ]
+            },
+            "description": "Simulate a WhatsApp message coming from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Simulate SMS Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": {\n    \"from\": { \"type\": \"sms\", \"number\": \"14155550123\" },\n    \"to\": { \"type\": \"sms\", \"number\": \"14155550200\" },\n    \"content\": { \"text\": \"track order #12345\" }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/inbound-message",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "webhooks",
+                "inbound-message"
+              ]
+            },
+            "description": "Simulate an SMS message coming from a user"
+          },
+          "response": []
+        },
+        {
+          "name": "Track Order WhatsApp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": {\n    \"from\": { \"type\": \"whatsapp\", \"number\": \"14155550123\" },\n    \"to\": { \"type\": \"whatsapp\", \"number\": \"14155550100\" },\n    \"content\": { \"text\": \"track order #12345\" }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/inbound-message",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "webhooks",
+                "inbound-message"
+              ]
+            },
+            "description": "Track an order via WhatsApp"
+          },
+          "response": []
+        },
+        {
+          "name": "Form Activation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": {\n    \"from\": { \"type\": \"whatsapp\", \"number\": \"14155550123\" },\n    \"to\": { \"type\": \"whatsapp\", \"number\": \"14155550100\" },\n    \"content\": { \"text\": \"Where is my order?\" }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/inbound-message",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "webhooks",
+                "inbound-message"
+              ]
+            },
+            "description": "Activate the order tracking form"
+          },
+          "response": []
+        },
+        {
+          "name": "Form Follow-up",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": {\n    \"from\": { \"type\": \"whatsapp\", \"number\": \"14155550123\" },\n    \"to\": { \"type\": \"whatsapp\", \"number\": \"14155550100\" },\n    \"content\": { \"text\": \"#55555\" }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/inbound-message",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "webhooks",
+                "inbound-message"
+              ]
+            },
+            "description": "Follow up with an order number"
+          },
+          "response": []
+        },
+        {
+          "name": "Simulate Inbound (Simplified)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"channel\": \"whatsapp\",\n  \"from\": \"14155550123\",\n  \"text\": \"track order #12345\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/simulate/inbound",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "simulate",
+                "inbound"
+              ]
+            },
+            "description": "Simplified way to simulate inbound messages"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Webhook Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/data",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "webhooks",
+                "data"
+              ]
+            },
+            "description": "Get all webhook data (messages, responses, etc.)"
+          },
+          "response": []
+        },
+        {
+          "name": "Export Webhook Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/export",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "webhooks",
+                "export"
+              ]
+            },
+            "description": "Export webhook data as downloadable JSON"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Webhook Data",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/clear",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "webhooks",
+                "clear"
+              ]
+            },
+            "description": "Clear all webhook data"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}

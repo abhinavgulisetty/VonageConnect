@@ -37,10 +37,21 @@ RASA + Vonage multi-channel customer service bot.
    - Use "Simulate inbound" for WhatsApp/SMS testing
    - **Works offline** - includes intelligent fallback responses!
 
+4) **Testing with Postman**
+   - Import the Postman collection from `./postman/VonageConnect.postman_collection.json`
+   - Set a variable `baseUrl` to `http://localhost:3000`
+   - Try the various API endpoints to test WhatsApp/SMS simulation
+   - See `POSTMAN_GUIDE.md` for detailed instructions
+
+**Git Branches:**
+- `main` - The main development branch
+- `Demo` - Branch optimized for demo and testing with Postman support
+
 **Technical Notes:**
  - RASA model includes advanced order tracking with form handling and custom actions
  - Node.js server provides web UI, webhook handling, and fallback responses
  - Real-time activity monitoring with webhook payload logging
+ - CORS support for API testing with Postman
 
 Vonage ↔ Rasa wiring (WhatsApp/SMS)
 1) Create a Vonage application with Messages enabled
@@ -64,6 +75,7 @@ Vonage ↔ Rasa wiring (WhatsApp/SMS)
 4) Test
    - Send a WhatsApp/SMS to your configured number
    - The Node server forwards the text to Rasa and relays back Rasa replies via Vonage
+   - Use Postman to simulate messages and test API endpoints
 
 Here is a breakdown of the main idea, explained for a "RASA + Vonage" implementation.
 
